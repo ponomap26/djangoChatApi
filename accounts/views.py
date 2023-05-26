@@ -29,7 +29,4 @@ def edit(request):
     return render(request, 'edit.html', {'user_form': user_form, 'profile_form': profile_form})
 
 
-@receiver(post_save, sender=User)
-def create_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
+

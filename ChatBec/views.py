@@ -1,6 +1,7 @@
 
 from django.db.models import Q
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,7 +10,7 @@ from rest_framework import permissions
 from django.contrib.auth.models import User
 
 
-from ChatBec.models import Room, Chat
+from ChatBec.models import Room, Chat, Profile
 from ChatBec.serializers import (RoomSerializers, ChatSerializers, ChatPostSerializers, UserSerializer)
 
 """Комнаты чата"""
@@ -71,7 +72,10 @@ class AddUsersRoom(APIView):
             return Response(status=400)
 
 
-
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
 
 # """Регистрация пользователя"""
 #
