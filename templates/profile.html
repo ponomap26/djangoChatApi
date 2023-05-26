@@ -1,0 +1,32 @@
+{% extends 'flatpages/base.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2>Профиль пользователя</h2>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="first_name">Имя</label>
+                    <input type="text" name="first_name" id="first_name"
+                           value="{{ user.profile.first_name }}" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Фамилия</label>
+                    <input type="text" name="last_name" id="last_name"
+                           value="{{ user.profile.last_name }}" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email"
+                           value="{{ user.email }}" class="form-control">
+                </div>
+                <a href="{% url 'password_change' %}" class="btn btn-primary">Изменить пароль</a>
+                <button type="submit" class="btn btn-success">Сохранить изменения</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
