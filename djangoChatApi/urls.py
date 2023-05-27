@@ -17,26 +17,28 @@ Including another URLconf
 import accounts
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.template.defaulttags import url
 from django.urls import path, include
 from django.views.generic import TemplateView
 
 from ChatBec import views
 # from accounts.views import edit
+from ChatBec.views import edit
 
 from djangoChatApi import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/chat/', include("ChatBec.urls")),
+    path('api/', include("ChatBec.urls")),
     # path('', include('frontend.urls')),
-    path('auth/', include('djoser.urls')),
-    path('auth/', include('djoser.urls.authtoken')),
-    path('auth/', include('djoser.urls.jwt')),
+    # path('auth/', include('djoser.urls')),
+    # path('auth/', include('djoser.urls.authtoken')),
+    # path('auth/', include('djoser.urls.jwt')),
     # path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('accounts/', include('allauth.urls')),
-
-    # path('chat/', include('ChatBec.urls')),
+    path('accounts/edit/', login_required(edit), name='edit'),
+    # path('', include('ChatBec.urls')),
 
 ]
 

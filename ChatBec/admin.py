@@ -1,5 +1,5 @@
+from accounts.models import User
 from django.contrib import admin
-
 
 
 from ChatBec.models import Chat, Room, Profile
@@ -16,6 +16,8 @@ class ChatAdmin(admin.ModelAdmin):
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ['user', 'image']
+
+
 
 admin.site.register(Chat, ChatAdmin)
 admin.site.register(Room, RoomAdmin)

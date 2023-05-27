@@ -1,7 +1,8 @@
-
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.shortcuts import redirect, render
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,7 +10,7 @@ from rest_framework import permissions
 
 from django.contrib.auth.models import User
 
-
+from ChatBec.forms import UserEditForm, ProfileEditForm
 from ChatBec.models import Room, Chat, Profile
 from ChatBec.serializers import (RoomSerializers, ChatSerializers, ChatPostSerializers, UserSerializer)
 
@@ -76,6 +77,32 @@ class AddUsersRoom(APIView):
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+
+
+
+
+
+
+@login_required
+def edit(request):
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = Profile(user=request.user)
+
+    user_form = UserEditForm(instance=request.user)
+    profile_form = ProfileEditForm(instance=profile)
+
+    if request.method == 'POST':
+        user_form = UserEditForm(instance=request.user, data=request.POST)
+        profile_form = ProfileEditForm(instance=profile, data=request.POST, files=request.FILES)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return redirect('edit')
+
+    return render(request, 'edit.html', {'user_form': user_form, 'profile_form': profile_form})
+
 
 # """Регистрация пользователя"""
 #
