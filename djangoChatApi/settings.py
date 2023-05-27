@@ -168,7 +168,7 @@ REST_FRAMEWORK = {
     # 'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
 
 }
-ASGI_APPLICATION = 'ChatBecapp.routing.application'
+ASGI_APPLICATION = 'djangoChAtApiapp.routing.application'
 
 CHANNEL_LAYERS = {
     'default': {
