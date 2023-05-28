@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    # 'corsheaders',
 
 ]
 
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'djangoChatApi.urls'
@@ -168,7 +170,7 @@ REST_FRAMEWORK = {
     # 'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
 
 }
-ASGI_APPLICATION = 'djangoChAtApiapp.routing.application'
+ASGI_APPLICATION = 'ChAtBecapp.routing.application'
 
 CHANNEL_LAYERS = {
     'default': {

@@ -7,14 +7,14 @@ import UserList from './components/UserList';
 function App() {
   return (
     <Router>
-      <Route exact path="/" component={ChatList} />
-      <Route exact path="/chats/:id/" component={ChatDetail} />
+      <Route exact path="/root/" component={ChatList} />
+      <Route exact path="/message/:id/" component={ChatDetail} />
       <Route exact path="/users/" component={UserList} />
     </Router>
   );
 }
 
-function RegistrationLink() {
+function RegistrationLinks() {
   return (
     <div>
       <a href="/accounts/login/">Войти</a>
@@ -24,4 +24,4 @@ function RegistrationLink() {
   );
 }
 
-export { App, RegistrationLink };
+export { App, RegistrationLinks };

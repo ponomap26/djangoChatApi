@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import useWebSocket from 'react-use-websocket';
 import axios from 'axios';
 import io from 'socket.io-client';
 
 function ChatDetail(props) {
-  const [chat, setChat] = useState(null);
+  // При создании state для чата и сообщений нужно указать их начальное значение
+  const [chat, setChat] = useState({});
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
   const [socket, setSocket] = useState(null);
+  const { sendJsonMessage } = useWebSocket('ws://localhost:8000');
 
   useEffect(() => {
+    // Добавляем маркировки к url-адресам, чтобы они были строками
     axios.get(`http://localhost:8000/chats/${props.match.params.id}/`)
       .then(response => {
         setChat(response.data);
@@ -26,14 +30,17 @@ function ChatDetail(props) {
       });
 
     const newSocket = io('http://localhost:8000');
+
     newSocket.on('connect', () => {
       console.log('Connected to WebSocket');
       setSocket(newSocket);
     });
+
     newSocket.on('disconnect', () => {
       console.log('Disconnected from WebSocket');
       setSocket(null);
     });
+
     newSocket.on('message', message => {
       setMessages([...messages, message]);
     });
@@ -47,21 +54,15 @@ function ChatDetail(props) {
 
   const handleSubmit = event => {
     event.preventDefault();
-    axios.post('http://localhost:8000/message/', {
+    // Переносим всю отправку сообщения в отправку в WebSocket
+    const newMessage = {
       text: text,
       sender: 1, // TODO: Replace with actual user ID
       receiver: chat.members[0].id, // TODO: Replace with actual receiver ID
       chat: chat.id,
-    })
-      .then(response => {
-        setText('');
-        if (socket) {
-          socket.emit('message', response.data);
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    };
+    sendJsonMessage(newMessage);
+    setText('');
   };
 
   return (
